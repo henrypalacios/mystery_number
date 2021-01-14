@@ -5,38 +5,46 @@ contract Gaming {
     address owner;
     bool public online ;
     struct Player  {
-        address player;        
-        string playerName;     
-        uint playerBalance;    
         uint wins;             
         uint losses;           
     }                          
-    mapping(uint => Player) public players;    
+    mapping(address => Player) public players;    
     
     /*Player public player;*/
 
     constructor() public {
         owner = msg.sender;
         online = true;
-        players[0] = Player(msg.sender, "Test Player", 0, 1, 2);
+    }
+
+    modifier isOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
     }
     
-    event PlayerWon(address player, uint value);
+    event PlayerWon(address player, uint value, uint mysteryNumber, uint displayNumber);
+    event PlayerLost(address player, uint value, uint mysteryNumber, uint displayNumber);
+    event GameFunded(address funder, uint value);
     
-    function winOrLose(uint display, bool guess, uint wager) 
-    external payable returns (bool) {
+    /* TODO: Fix when the mysteryNumber is equal to display*/
+    function winOrLose(uint display, bool guess)
+    external payable returns (bool, uint) {
         require(online==true);
         require(msg.sender.balance > msg.value, "Insufficient funds");
         uint mysteryNumber_ = mysteryNumber();
         bool isWinner = determineWinner(mysteryNumber_, display, guess);
+        Player storage player = players[msg.sender];
         if (isWinner == true) {
           /* Player won */
-          emit PlayerWon(msg.sender, msg.value);
-          msg.sender.transfer(wager*2);
-          return true;
+          player.wins += 1; 
+          emit PlayerWon(msg.sender, msg.value, mysteryNumber_, display);
+          msg.sender.transfer(msg.value*2);
+          return (true, mysteryNumber_);
         } else if (isWinner == false) {
           /* Player lost */
-          return false;
+          player.losses += 1;
+          emit PlayerLost(msg.sender, msg.value, mysteryNumber_, display);
+          return (false, mysteryNumber_);
         }
     }
     
@@ -64,5 +72,13 @@ contract Gaming {
                 return true;
             }
         }
+    }
+
+    function withdrawFunds() public isOwner  {
+        msg.sender.transfer(address(this).balance);
+    }
+
+    function fundGame() public isOwner payable {
+        emit GameFunded(msg.sender, msg.value);
     }
 }
