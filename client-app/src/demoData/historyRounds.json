@@ -1,0 +1,19 @@
+[
+  {
+    "transactionHash": 1234,
+    "result": "Win",
+    "wager": "0.1",
+    "guess": "higher",
+    "displayedNumber": "2",
+    "mysteryNumber": "1"
+  },
+
+  {
+    "transactionHash": 1235,
+    "result": "Loss",
+    "wager": "2",
+    "guess": "lower",
+    "displayedNumber": "9",
+    "mysteryNumber": "1"
+  }
+]
