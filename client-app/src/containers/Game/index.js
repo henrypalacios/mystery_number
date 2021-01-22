@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardHeader } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FormControl,
   FormLabel,
@@ -8,10 +8,12 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import { ListItem, List, ListItemText } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
+import { Grid } from "@material-ui/core";
 
+import MyCard from "../../components/cards/MyCard";
 import { onDisplayNumber, onPlayRound } from "../../redux/game/actionCreator";
 import { setProvider } from "../../redux/ethereum-provider/actionCreator";
 
@@ -35,15 +37,15 @@ function DisplayNumber() {
 
   return (
     <section>
-      <Card>
-        <CardHeader
-          title="Player's Number"
-          subheader="Will the mystery number be higher or lower than this number?"
-        />
-        <p>
-          <strong>{displayedNumber}</strong>
-        </p>
-      </Card>
+      <MyCard
+        item={{
+          title: "Player's Number",
+          subheader:
+            "Will the mystery number be higher or lower than this number?",
+        }}
+      >
+        <Typography variant="h4">{displayedNumber}</Typography>
+      </MyCard>
     </section>
   );
 }
@@ -79,9 +81,11 @@ function BettingWindow() {
 
   return (
     <section>
-      <Card>
-        <CardHeader title="Betting Window" />
-
+      <MyCard
+        item={{
+          title: "Betting Window",
+        }}
+      >
         <form autoComplete="off">
           <FormControl component="fieldset">
             <FormLabel component="legend">
@@ -120,11 +124,11 @@ function BettingWindow() {
               color="secondary"
               onClick={playGame}
             >
-              Let's Play
+              Place a Wager
             </Button>
           </FormControl>
         </form>
-      </Card>
+      </MyCard>
     </section>
   );
 }
@@ -138,8 +142,7 @@ const HistoryOperations = () => {
 
   return (
     <section>
-      <Card>
-        <CardHeader title="History Operations" />
+      <MyCard item={{ title: "History Operations" }}>
         <List>
           {history.map((round) => (
             <ListItem key={round.transactionHash}>
@@ -154,7 +157,7 @@ const HistoryOperations = () => {
             </ListItem>
           ))}
         </List>
-      </Card>
+      </MyCard>
     </section>
   );
 };
@@ -171,7 +174,7 @@ function Game() {
   return (
     <div>
       <header>
-        <h1>Mystery Number Game</h1>
+        <h1></h1>
       </header>
       <main>
         <DisplayNumber />

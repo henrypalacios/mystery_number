@@ -4,44 +4,27 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 
 const styles = (theme) => ({
-  root: { flexGrow: 1 },
-  flex: { flex: 1 },
-  menuButton: { marginLeft: -12, marginRight: 20 },
+  flex: { flex: 0.5 },
+  menuButton: { marginLeft: 0, marginRight: 20 },
 });
 
 const FixedPosition = withStyles(styles)(({ classes }) => (
-  <div className={classes.root}>
-    {" "}
-    <AppBar position="fixed">
-      {" "}
-      <Toolbar>
-        {" "}
-        <IconButton
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="Menu"
-        >
-          {" "}
-          <MenuIcon />{" "}
-        </IconButton>{" "}
-        <Typography variant="title" color="inherit" className={classes.flex}>
-          {" "}
-          Title{" "}
-        </Typography>{" "}
-        <Button color="inherit">Login</Button>{" "}
-      </Toolbar>{" "}
-    </AppBar>{" "}
-    <ul>
-      {" "}
-      {new Array(500).fill(null).map((v, i) => (
-        <li key={i}>{i}</li>
-      ))}{" "}
-    </ul>{" "}
-  </div>
+  <AppBar position="fixed">
+    <Toolbar>
+      <Typography
+        variant="Mystery Number Game"
+        color="inherit"
+        className={classes.flex}
+      >
+        Mystery Number Game
+      </Typography>
+      <Button color="inherit">Let's Play</Button>
+      <ThumbUpIcon />
+    </Toolbar>
+  </AppBar>
 ));
 
 export default FixedPosition;
