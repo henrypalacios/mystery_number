@@ -13,7 +13,7 @@ import { ListItem, List, ListItemText } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 
 import { onDisplayNumber, onPlayRound } from "../../redux/game/actionCreator";
-import getWeb3 from "../../utils/getWeb3";
+import { setProvider } from "../../redux/ethereum-provider/actionCreator";
 
 function DisplayNumber() {
   const dispatch = useDispatch();
@@ -51,12 +51,13 @@ function DisplayNumber() {
 function BettingWindow() {
   const initialState = {
     highLow: "higher",
-    wage: 0,
+    wager: 0.1,
   };
   const [values, setValues] = useState(initialState);
-  const { displayedNumber } = useSelector((state) => {
+  const { displayedNumber, error } = useSelector((state) => {
     return {
       displayedNumber: state.game.displayNumber,
+      error: state.ethereumProvider.error,
     };
   });
   const dispatch = useDispatch();
@@ -66,7 +67,6 @@ function BettingWindow() {
   };
 
   const playGame = () => {
-    console.log("Play with:", values);
     dispatch(
       onPlayRound({
         ...values,
@@ -110,11 +110,16 @@ function BettingWindow() {
               id="standard-wage"
               label="Required"
               placeholder="Put your wage in ether: 0.004"
-              onChange={handleChange("wage")}
-              value={values.wage}
+              onChange={handleChange("wager")}
+              value={values.wager}
             />
 
-            <Button variant="outlined" color="secondary" onClick={playGame}>
+            <Button
+              disabled={error ? true : false}
+              variant="outlined"
+              color="secondary"
+              onClick={playGame}
+            >
               Let's Play
             </Button>
           </FormControl>
@@ -127,7 +132,7 @@ function BettingWindow() {
 const HistoryOperations = () => {
   const { history } = useSelector((state) => {
     return {
-      history: state.game.historyRounds,
+      history: state.game.roundHistory,
     };
   });
 
@@ -142,8 +147,8 @@ const HistoryOperations = () => {
                 key={round.transactionHash}
                 primary={`Result:\t${round.result}`}
                 secondary={
-                  `You ${round.result} ${round.wager} by guessing ${round.displayedNumber}` +
-                  ` would be ${round.guess} than ${round.mysteryNumber}!`
+                  `You ${round.result} ${round.wager} ETH by guessing ${round.displayedNumber}` +
+                  ` would be ${round.guess} than mystery number ${round.mysteryNumber}!`
                 }
               />
             </ListItem>
@@ -155,14 +160,14 @@ const HistoryOperations = () => {
 };
 
 function Game() {
-  // useEffect(() => {
-  //   var web3 = null;
-  //   (async () => {
-  //     web3 = await getWeb3();
-  //   })();
+  const dispatch = useDispatch();
 
-  //   console.log(web3);
-  // });
+  useEffect(() => {
+    (async function () {
+      await dispatch(setProvider());
+    })();
+  });
+
   return (
     <div>
       <header>

@@ -3,7 +3,7 @@ import staticData from "../../demoData/historyRounds.json";
 
 const initialState = {
   displayNumber: null,
-  historyRounds: staticData,
+  roundHistory: [],
   loading: false,
   error: null,
 };
@@ -19,6 +19,15 @@ const GameReducer = (state = initialState, action) => {
       return { ...state, displayNumber: data };
 
     case actions.DISPLAY_NUMBER_ERROR:
+      return { ...state, error };
+
+    case actions.PLAY_ROUND_BEGIN:
+      return { ...state, loading: true };
+
+    case actions.PLAY_ROUND_SUCCESS:
+      return { ...state, roundHistory: data };
+
+    case actions.PLAY_ROUND_ERROR:
       return { ...state, error };
 
     default:

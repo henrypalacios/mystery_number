@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-// import { myStore } from "./redux/store";
+
 import myStore from "./redux/store";
-
+import myTheme from "./config/theme/mui-theme";
 import Game from "./containers/Game";
-
-const theme = createMuiTheme({});
+import AppBar from "./containers/Layout/AppBar";
 
 const ProviderConfig = () => {
   const [path, setPath] = useState(window.location.pathname);
@@ -21,7 +20,8 @@ const ProviderConfig = () => {
   }, [setPath]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={myTheme}>
+      <AppBar />
       <Router basename={process.env.PUBLIC_URL}>
         <Route path="/" component={Game} />
       </Router>
