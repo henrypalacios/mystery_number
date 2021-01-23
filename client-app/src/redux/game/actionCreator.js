@@ -25,7 +25,7 @@ const onDisplayNumber = (value) => {
 const onPlayRound = (values) => {
   return async (dispatch, getState) => {
     try {
-      dispatch(updateRoundBegin());
+      await dispatch(updateRoundBegin());
       const { web3Provider, networkId } = getState().ethereumProvider;
       const { roundHistory } = getState().game;
       const contract = await GameContract.build(web3Provider, networkId);
@@ -33,11 +33,18 @@ const onPlayRound = (values) => {
 
       let guessBoolean = values.highLow == "higher" ? true : false;
 
+      console.log("onPlayRound_Before:", {
+        displayedNumber,
+        guessBoolean,
+        wager,
+      });
+
       const responseContract = await contract.winOrLose(
         displayedNumber,
         guessBoolean,
         wager
       );
+
       const result = {
         ...responseContract,
         ...{ wager, displayedNumber, guess: values.highLow },

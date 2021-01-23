@@ -27,7 +27,6 @@ const actions = {
     return { type: actions.PLAY_ROUND_BEGIN };
   },
   updateRoundSuccess: (data) => {
-    console.log(data);
     return { type: actions.PLAY_ROUND_SUCCESS, data };
   },
   updateRoundError: (error) => {

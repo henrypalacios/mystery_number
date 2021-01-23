@@ -9,16 +9,13 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 const styles = (theme) => ({
   flex: { flex: 0.5 },
   menuButton: { marginLeft: 0, marginRight: 20 },
+  appBar: { marginBottom: theme.spacing(10) },
 });
 
 const FixedPosition = withStyles(styles)(({ classes }) => (
   <AppBar position="fixed">
     <Toolbar>
-      <Typography
-        variant="Mystery Number Game"
-        color="inherit"
-        className={classes.flex}
-      >
+      <Typography color="inherit" className={classes.flex}>
         Mystery Number Game
       </Typography>
       <Button color="inherit">Let's Play</Button>

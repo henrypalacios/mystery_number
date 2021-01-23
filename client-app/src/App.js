@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ThemeProvider } from "@material-ui/core";
+import { MuiThemeProvider } from "@material-ui/core";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 
 import myStore from "./redux/store";
-import myTheme from "./config/theme/mui-theme";
+import { muiTheme } from "./config/theme/mui-theme";
 import Game from "./containers/Game";
 import AppBar from "./containers/Layout/AppBar";
 
@@ -27,14 +27,14 @@ const ProviderConfig = withStyles(styles)(({ classes }) => {
   }, [setPath]);
 
   return (
-    <ThemeProvider theme={myTheme}>
+    <MuiThemeProvider theme={muiTheme}>
       <div className={classes.root}>
         <AppBar />
         <Router basename={process.env.PUBLIC_URL}>
           <Route path="/" component={Game} />
         </Router>
       </div>
-    </ThemeProvider>
+    </MuiThemeProvider>
   );
 });
 

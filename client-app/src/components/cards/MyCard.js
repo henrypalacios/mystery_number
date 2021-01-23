@@ -3,7 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   card: {
-    margin: theme.spacing(10),
+    marginRight: theme.spacing(10),
+    marginLeft: theme.spacing(10),
+    marginBottom: theme.spacing(6),
     padding: theme.spacing(2),
     textAlign: "center",
   },

@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FormControl,
-  FormLabel,
-  Button,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
-  Typography,
-} from "@material-ui/core";
 import { ListItem, List, ListItemText } from "@material-ui/core";
-import { Grid } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
 
 import MyCard from "../../components/cards/MyCard";
-import { onDisplayNumber, onPlayRound } from "../../redux/game/actionCreator";
+import Container from "../../components/grids/MainContainer";
+import Item from "../../components/grids/Item";
+import ModalConfirm from "../../components/modals/ModalConfirm";
+import BettingWindow from "./BettingWindow";
+import { onDisplayNumber } from "../../redux/game/actionCreator";
 import { setProvider } from "../../redux/ethereum-provider/actionCreator";
 
 function DisplayNumber() {
@@ -45,89 +39,6 @@ function DisplayNumber() {
         }}
       >
         <Typography variant="h4">{displayedNumber}</Typography>
-      </MyCard>
-    </section>
-  );
-}
-
-function BettingWindow() {
-  const initialState = {
-    highLow: "higher",
-    wager: 0.1,
-  };
-  const [values, setValues] = useState(initialState);
-  const { displayedNumber, error } = useSelector((state) => {
-    return {
-      displayedNumber: state.game.displayNumber,
-      error: state.ethereumProvider.error,
-    };
-  });
-  const dispatch = useDispatch();
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const playGame = () => {
-    dispatch(
-      onPlayRound({
-        ...values,
-        displayedNumber,
-      })
-    );
-    dispatch(onDisplayNumber(null));
-    setValues(initialState);
-  };
-
-  return (
-    <section>
-      <MyCard
-        item={{
-          title: "Betting Window",
-        }}
-      >
-        <form autoComplete="off">
-          <FormControl component="fieldset">
-            <FormLabel component="legend">
-              The mystery number will be:
-            </FormLabel>
-            <RadioGroup
-              aria-label="gender"
-              name="bit1"
-              value={values.highLow}
-              onChange={handleChange("highLow")}
-            >
-              <FormControlLabel
-                value="higher"
-                control={<Radio />}
-                label="Higher"
-              />
-              <FormControlLabel
-                value="lower"
-                control={<Radio />}
-                label="Lower"
-              />
-            </RadioGroup>
-
-            <TextField
-              required
-              id="standard-wage"
-              label="Required"
-              placeholder="Put your wage in ether: 0.004"
-              onChange={handleChange("wager")}
-              value={values.wager}
-            />
-
-            <Button
-              disabled={error ? true : false}
-              variant="outlined"
-              color="secondary"
-              onClick={playGame}
-            >
-              Place a Wager
-            </Button>
-          </FormControl>
-        </form>
       </MyCard>
     </section>
   );
@@ -164,26 +75,67 @@ const HistoryOperations = () => {
 
 function Game() {
   const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => {
+    return {
+      loading: state.ethereumProvider.loading,
+      error: state.ethereumProvider.error,
+    };
+  });
 
   useEffect(() => {
     (async function () {
       await dispatch(setProvider());
     })();
-  });
+  }, []);
+
+  const onSetProvider = async () => {
+    await dispatch(setProvider());
+  };
+
+  const renderGame = () => {
+    if (loading) {
+      return (
+        <Fragment>
+          <Item>
+            <CircularProgress />
+          </Item>
+          <Item>
+            <Typography>Setting Ethereum Provider...</Typography>
+          </Item>
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          <Item>
+            <DisplayNumber />
+          </Item>
+          <Item>
+            <BettingWindow />
+          </Item>
+          <Item>
+            <HistoryOperations />
+          </Item>
+        </Fragment>
+      );
+    }
+  };
 
   return (
     <div>
-      <header>
-        <h1></h1>
-      </header>
       <main>
-        <DisplayNumber />
-        <BettingWindow />
-        <HistoryOperations />
+        <Container>{renderGame()}</Container>
       </main>
       <footer>
         <p></p>
       </footer>
+      <ModalConfirm
+        title="Ethereum provider could not be configured"
+        text={error}
+        buttonText="Try Again..."
+        onClick={() => onSetProvider()}
+        activate={error ? true : false}
+      />
     </div>
   );
 }

@@ -22,7 +22,6 @@ class GameContract {
   }
 
   static async build(web3, networkId) {
-    console.log(networkId);
     if (!instance) {
       const accounts = await web3.eth.getAccounts();
       if (!accounts.length) {
@@ -44,8 +43,7 @@ class GameContract {
    **/
   async winOrLose(displayedNumber, guess, wager) {
     const weiValue = this.web3.utils.toWei(wager.toString(), "ether");
-    console.log("WinOrLose_params: ", displayedNumber, guess, wager.toString());
-    console.log("WinOrLose_accounts: ", this.accounts[0]);
+    console.debug("WinOrLose_account: ", this.accounts[0]);
 
     return new Promise((resolve, reject) =>
       this.contract.methods
@@ -54,9 +52,12 @@ class GameContract {
         .on("receipt", (receipt) => {
           const { transactionHash, events } = receipt;
           const type_event = Object.keys(this._ROUND_TYPE_EVENT).find(
-            (key) => key == Object.keys(events)[0]
+            (key) => key === Object.keys(events)[0]
           );
 
+          if (type_event === undefined) {
+            reject("No events were thrown");
+          }
           const result = {
             transactionHash,
             result: this._ROUND_TYPE_EVENT[type_event],
