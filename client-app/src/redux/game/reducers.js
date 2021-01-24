@@ -1,5 +1,5 @@
 import actions from "./actions";
-import staticData from "../../demoData/historyRounds.json";
+// import staticData from "../../demoData/historyRounds.json";
 
 const initialState = {
   displayNumber: null,

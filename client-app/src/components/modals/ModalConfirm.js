@@ -18,7 +18,7 @@ const ConfirmingActions = ({ title, text, buttonText, onClick, activate }) => {
 
   useEffect(() => {
     setOpen(activate);
-  });
+  }, []);
 
   return (
     <Fragment>
@@ -28,10 +28,10 @@ const ConfirmingActions = ({ title, text, buttonText, onClick, activate }) => {
         maxWidth="xs"
         open={open}
       >
-        <DialogTitle>{title}</DialogTitle>{" "}
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{text}</DialogContentText>{" "}
-        </DialogContent>{" "}
+          <DialogContentText>{text}</DialogContentText>
+        </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={onConfirm} color="primary">
             {buttonText}
@@ -47,6 +47,7 @@ ConfirmingActions.defaultProps = {
   text: "Are you sure you want to delete?",
   buttonText: "Confirm",
   onClick: null,
+  activate: false,
 };
 
 export default ConfirmingActions;

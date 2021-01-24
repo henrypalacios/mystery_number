@@ -9,7 +9,7 @@ import {
   Radio,
   TextField,
 } from "@material-ui/core";
-import { CircularProgress, Typography } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 
 import MyCard from "../../components/cards/MyCard";
 import { onDisplayNumber, onPlayRound } from "../../redux/game/actionCreator";

@@ -43,7 +43,7 @@ class GameContract {
    **/
   async winOrLose(displayedNumber, guess, wager) {
     const weiValue = this.web3.utils.toWei(wager.toString(), "ether");
-    console.debug("WinOrLose_account: ", this.accounts[0]);
+    console.log("WinOrLose_account: ", this.accounts[0]);
 
     return new Promise((resolve, reject) =>
       this.contract.methods

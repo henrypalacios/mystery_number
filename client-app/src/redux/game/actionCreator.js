@@ -31,7 +31,7 @@ const onPlayRound = (values) => {
       const contract = await GameContract.build(web3Provider, networkId);
       const { wager, displayedNumber } = values;
 
-      let guessBoolean = values.highLow == "higher" ? true : false;
+      let guessBoolean = values.highLow === "higher" ? true : false;
 
       console.log("onPlayRound_Before:", {
         displayedNumber,

@@ -56,22 +56,19 @@ contract Gaming {
     function determineWinner(uint number, uint display, bool guess)
     public pure returns (bool) {
         /* Use true for higher guess, false for a lower guess */
-    
+        bool isWinner = false; 
+
         if (guess == true) {
             if (number > display ) {
-                return true;
-            }
-            if (number < display) {
-                return false;
+                isWinner = true;
             }
         } else if (guess == false) {
-            if (number > display ) {
-                return false;
-            }
             if (number < display) {
-                return true;
+                isWinner = true;
             }
         }
+
+        return isWinner;
     }
 
     function withdrawFunds() public isOwner  {
